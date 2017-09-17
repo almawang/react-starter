@@ -1,33 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 
-const About = (props) => {
-  return <div> All there is to know about me </div>;
-};
-const Welcome = (props) => {
-  return <div>Welcome</div>;
-};
-const Nav = (props) => {
-  return (
-    <nav>
-      <ul>
-        <li><NavLink to="/">Home</NavLink></li>
-        <li><NavLink to="/about">About</NavLink></li>
-      </ul>
-    </nav>
-  );
-};
-const App = (props) => {
-  return (
-    <Router>
-      <div>
-        <Nav />
-        <Route exact path="/" component={Welcome} />
-        <Route path="/about" component={About} />
-      </div>
-    </Router>
-  );
-};
+import reducers from './reducers';
 
-ReactDOM.render(<App />, document.getElementById('main'));
+import App from './components/app';
+
+// this creates the store with the reducers, and does some other stuff to initialize devtools
+const store = createStore(reducers, {}, compose(
+  applyMiddleware(),
+  window.devToolsExtension ? window.devToolsExtension() : f => f,
+));
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+  , document.getElementById('main'));
